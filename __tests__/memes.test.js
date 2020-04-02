@@ -24,7 +24,43 @@ describe('meme routes', () => {
       });
   });
 
+  it('gets all memes', async() => {
+    const memes = await getMemes();
+    return request(app)
+      .get('/api/v1/memes')
+      .then(res => {
+        expect(res.body).toEqual(memes);
+      });
+  });
 
+  it('gets by id', async() => {
+    const meme = await getMeme();
+    return request(app)
+      .get(`/api/v1/memes/${meme._id}`)
+      .then(res => {
+        expect(res.body).toEqual(meme);
+      });
+  });
 
-  
+  it('patches a meme', async() => {
+    const meme = await getMeme();
+    return request(app)
+      .patch(`/api/v1/memes/${meme._id}`)
+      .send({ top: 'new top' })
+      .then(res => {
+        expect(res.body).toEqual({
+          ...meme,
+          top: 'new top'
+        });
+      });
+  });
+
+  it('deletes a meme', async() => {
+    const meme = await getMeme();
+    return request(app)
+      .delete(`/api/v1/memes/${meme._id}`)
+      .then(res => {
+        expect(res.body).toEqual(meme);
+      });
+  });
 });
